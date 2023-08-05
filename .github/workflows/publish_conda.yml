@@ -15,13 +15,13 @@ jobs:
       with:
         fetch-depth: 0
 
-    - uses: conda-incubator/setup-miniconda@v2.2.0
-      with:
-        miniconda-version: "latest"
-        python-version: 3.11
-        auto-update-conda: true
-        activate-environment: ANACONDA
-        use-only-tar-bz2: true
+    # - uses: conda-incubator/setup-miniconda@v2.2.0
+    #   with:
+    #     miniconda-version: "latest"
+    #     python-version: 3.11
+    #     auto-update-conda: true
+    #     activate-environment: ANACONDA
+    #     use-only-tar-bz2: true
 
     - name: Verify conda environment
       run: |
