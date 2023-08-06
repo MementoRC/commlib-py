@@ -18,6 +18,7 @@ jobs:
     - name: Set Environment Variables
       run: |
         sed "/#/d" ./.github/variables/anaconda_variables.env >> "$GITHUB_ENV"
+        echo "" >>  "$GITHUB_ENV"
         echo "RELEASE_VERSION=$(awk -F'\"' '/__version__/ {print $2}' commlib/__init__.py)" >> "$GITHUB_ENV"
       shell: bash
 
@@ -30,24 +31,16 @@ jobs:
         conda info | grep "user-agent"
 
     - name: Build conda package
-      env:
-        BUILD_DIR: ${{ env.CONDA_BUILD_DIR }}
       run: |
-        # RELEASE_VERSION=`awk -F'"' '/__version__/ {print $2}' commlib/__init__.py` conda build -c conda-forge --output-folder ${{ env.CONDA_BUILD_DIR }} .conda
-        conda build -c conda-forge --output-folder "$BUILD_DIR" .conda
+        conda build -c conda-forge --output-folder ${{ env.CONDA_BUILD_DIR }} .conda
     
     - name: Upload package
-      env:
-        BUILD_DIR: ${{ env.CONDA_BUILD_DIR }}
-        CHANNEL: ${{ env.ANACONDA_CHANNEL }}
       run: |
-        find "$BUILD_DIR" -name *.tar.bz2 | while read file
+        find ${{ env.CONDA_BUILD_DIR }} -name *.tar.bz2 | while read file
         do
-            anaconda -t ${{ secrets.ANACONDA_TOKEN }} -u "$CHANNEL" upload $file
+            python -m anaconda -t ${{ secrets.ANACONDA_TOKEN }} -u ${{ env.ANACONDA_CHANNEL }} upload $file
         done
     
     - name: Cleanup
-      env:
-        BUILD_DIR: ${{ env.CONDA_BUILD_DIR }}
       run: |
-        rm -rf "$BUILD_DIR"
+        rm -rf ${{ env.CONDA_BUILD_DIR }}
