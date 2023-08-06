@@ -1,9 +1,6 @@
-{% set data = load_setup_py_data(setup_file='../setup.cfg', from_recipe_dir=True) %}
-{% set version = load_setup_py_data(setup_file='../commlib/__init__.py', from_recipe_dir=True) %}
-
 package:
   name: commlib-py
-  version: {{ version['__version__'] }}
+  version: {{ os.environ.get('RELEASE_VERSION') }}
 
 source:
   path: .
