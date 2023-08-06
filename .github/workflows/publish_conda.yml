@@ -15,34 +15,39 @@ jobs:
       with:
         fetch-depth: 0
 
-    # - uses: conda-incubator/setup-miniconda@v2.2.0
-    #   with:
-    #     miniconda-version: "latest"
-    #     python-version: 3.11
-    #     auto-update-conda: true
-    #     activate-environment: ANACONDA
-    #     use-only-tar-bz2: true
+    - name: Set Environment Variables
+      run: |
+        sed "/#/d" ./.github/variables/anaconda_variables.env >> "$GITHUB_ENV"
+        echo "RELEASE_VERSION=$(awk -F'\"' '/__version__/ {print $2}' commlib/__init__.py)" >> "$GITHUB_ENV"
+      shell: bash
+
+    - name: Install Anaconda Client & Conda build
+      run: |
+        conda install -y anaconda-client conda-build
 
     - name: Verify conda environment
       run: |
         conda info | grep "user-agent"
 
-    - name: Install Anaconda
-      run: |
-        conda install -y anaconda-client conda-build
-
     - name: Build conda package
+      env:
+        BUILD_DIR: ${{ env.CONDA_BUILD_DIR }}
       run: |
-        RELEASE_VERSION=`awk -F'"' '/__version__/ {print $2}' commlib/__init__.py` conda build -c conda-forge --output-folder conda-bld-tmp .conda
+        # RELEASE_VERSION=`awk -F'"' '/__version__/ {print $2}' commlib/__init__.py` conda build -c conda-forge --output-folder ${{ env.CONDA_BUILD_DIR }} .conda
+        conda build -c conda-forge --output-folder "$BUILD_DIR" .conda
     
     - name: Upload package
+      env:
+        BUILD_DIR: ${{ env.CONDA_BUILD_DIR }}
+        CHANNEL: ${{ env.ANACONDA_CHANNEL }}
       run: |
-        find conda-bld/ -name *.tar.bz2 | while read file
+        find "$BUILD_DIR" -name *.tar.bz2 | while read file
         do
-            echo $file
-            anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload $file
+            anaconda -t ${{ secrets.ANACONDA_TOKEN }} -u "$CHANNEL" upload $file
         done
     
     - name: Cleanup
+      env:
+        BUILD_DIR: ${{ env.CONDA_BUILD_DIR }}
       run: |
-        rm -rf conda-bld
+        rm -rf "$BUILD_DIR"
