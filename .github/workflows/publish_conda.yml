@@ -25,7 +25,6 @@ jobs:
     - name: Install Anaconda Client & Conda build - Activate base!
       run: |
         conda install -y anaconda-client conda-build
-        conda activate base
 
     - name: Verify conda environment
       run: |
@@ -37,6 +36,7 @@ jobs:
     
     - name: Upload package
       run: |
+        conda activate base
         find ${{ env.CONDA_BUILD_DIR }} -name *.tar.bz2 | while read file
         do
             anaconda -t ${{ secrets.ANACONDA_TOKEN }} -u ${{ env.ANACONDA_CHANNEL }} upload $file
