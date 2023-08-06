@@ -33,7 +33,7 @@ jobs:
 
     - name: Build conda package
       run: |
-        RELEASE_VERSION=`python -c import commlib; print(commlib.__version__)` conda build -c conda-forge --output-folder conda-bld .conda
+        RELEASE_VERSION=`python -c "import commlib; print(commlib.__version__)"` conda build -c conda-forge --output-folder conda-bld .conda
     
     - name: Convert binaries to other platforms
       run: |
