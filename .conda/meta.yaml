@@ -3,7 +3,7 @@ package:
   version: {{ os.environ.get('RELEASE_VERSION') }}
 
 source:
-  path: .
+  path: ..
 
 build:
   noarch: python
