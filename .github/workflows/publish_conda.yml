@@ -22,13 +22,14 @@ jobs:
         echo "RELEASE_VERSION=$(awk -F'\"' '/__version__/ {print $2}' commlib/__init__.py)" >> "$GITHUB_ENV"
       shell: bash
 
+    - name: Verify conda environment
+      run: |
+        conda activate base
+        conda info | grep "user-agent"
+
     - name: Install Anaconda Client & Conda build - Activate base!
       run: |
         conda install -y anaconda-client conda-build
-
-    - name: Verify conda environment
-      run: |
-        conda info | grep "user-agent"
 
     - name: Build conda package
       run: |
