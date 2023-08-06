@@ -34,9 +34,9 @@ test:
     - make test
 
 about:
-  home: {{ data['url'] }}
-  summary: {{ data['description'] }}
-  license: {{ data['license'] }}
+  home: https://github.com/robotics-4-all/commlib-py
+  summary: "Communication Library for Python implementing the most common communication patterns for CyberPhysical Systems."
+  license: MIT
   license_file:
     - LICENSE.txt
     - LICENSE
