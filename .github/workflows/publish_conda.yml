@@ -33,7 +33,7 @@ jobs:
 
     - name: Build conda package
       run: |
-        RELEASE_VERSION=`awk -F'"' '/__version__/ {print $2}' commlib/__init__.py` conda build -c conda-forge --outpur-folder conda-bld-tmp .conda
+        RELEASE_VERSION=`awk -F'"' '/__version__/ {print $2}' commlib/__init__.py` conda build -c conda-forge --output-folder conda-bld-tmp .conda
     
     - name: Upload package
       run: |
