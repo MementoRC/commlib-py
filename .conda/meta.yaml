@@ -1,7 +1,9 @@
+{% set data = load_setup_py_data(setup_file='../setup.cfg', from_recipe_dir=True) %}
+{% set version = load_setup_py_data(setup_file='../commlib/__init__.py', from_recipe_dir=True) %}
 
 package:
   name: commlib-py
-  version: {{ GIT_DESCRIBE_TAG }}
+  version: {{ version['__version__'] }}
 
 source:
   path: .
@@ -35,9 +37,9 @@ test:
     - make test
 
 about:
-  home: https://github.com/robotics-4-all/commlib-py
-  summary: "Internal  DSL for communication and messaging in CPS"
-  license: MIT
+  home: {{ data['url'] }}
+  summary: {{ data['description'] }}
+  license: {{ data['license'] }}
   license_file:
     - LICENSE.txt
     - LICENSE
