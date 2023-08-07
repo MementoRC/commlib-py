@@ -20,13 +20,14 @@ jobs:
         sed "/#/d" ./.github/variables/anaconda_variables.env >> "$GITHUB_ENV"
         echo "" >>  "$GITHUB_ENV"
         echo "RELEASE_VERSION=$(awk -F'\"' '/__version__/ {print $2}' commlib/__init__.py)" >> "$GITHUB_ENV"
+        echo "CONDA=$CONDA" >> "$GITHUB_ENV"
       shell: bash
 
     - name: Update conda environment
       run: |
         env
         whereis conda
-        source ${{ CONDA }}/etc/profile.d/conda.sh
+        source ${{ env.CONDA }}/etc/profile.d/conda.sh
         conda update -n base -c defaults conda
         conda create -n ANACONDA
         conda activate ANACONDA
