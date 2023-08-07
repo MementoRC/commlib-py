@@ -26,11 +26,16 @@ jobs:
       run: |
         env
         whereis conda
-        source ${{ env.CONDA }}/etc/profile.d/conda.sh
+        source ${{ CONDA }}/etc/profile.d/conda.sh
         conda update -n base -c defaults conda
         conda create -n ANACONDA
         conda activate ANACONDA
         conda info | grep "user-agent"
+
+    - name: Update conda environment
+      run: |
+        conda env list
+        conda activate ANACONDA
 
     - name: Install Anaconda Client & Conda build - Activate base!
       run: |
