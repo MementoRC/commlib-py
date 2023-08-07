@@ -22,22 +22,15 @@ jobs:
         echo "RELEASE_VERSION=$(awk -F'\"' '/__version__/ {print $2}' commlib/__init__.py)" >> "$GITHUB_ENV"
       shell: bash
 
-    - name: Install Miniconda
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        miniconda-version: "latest"
-        python-version: 3.11
-        auto-update-conda: true
-        auto-activate-base: true
-        use-only-tar-bz2: true
-
     - name: Verify conda environment
       run: |
-        conda activate base
+        conda init bash
         conda info | grep "user-agent"
+        conda create -n ANACONDA
 
     - name: Install Anaconda Client & Conda build - Activate base!
       run: |
+        conda activate ANACONDA
         conda install -y anaconda-client conda-build
 
     - name: Build conda package
