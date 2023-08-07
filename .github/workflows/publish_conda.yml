@@ -49,7 +49,7 @@ jobs:
         conda activate ANACONDA
         find ${{ env.CONDA_BUILD_DIR }} -name *.tar.bz2 | while read file
         do
-            anaconda -t ${{ secrets.ANACONDA_TOKEN }} -u ${{ env.ANACONDA_CHANNEL }} upload $file
+            anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload -u ${{ env.ANACONDA_CHANNEL }} $file
         done
     
     - name: Cleanup
