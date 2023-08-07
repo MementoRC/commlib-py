@@ -35,8 +35,8 @@ jobs:
 
     - name: Update conda environment
       run: |
-        ${{ env.CONDA }}/bin/conda env list
-        ${{ env.CONDA }}/bin/conda activate ANACONDA
+        source ${{ env.CONDA }}/etc/profile.d/conda.sh
+        conda activate ANACONDA
 
     - name: Update conda environment
       run: |
