@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -el {0}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -25,23 +25,24 @@ jobs:
     - name: Update conda environment
       run: |
         env
-        source /usr/share/miniconda/etc/profile.d/conda.sh
+        whereis conda
+        source ${{ env.CONDA }}/etc/profile.d/conda.sh
         conda update -n base -c defaults conda
         conda create -n ANACONDA
+        conda activate ANACONDA
         conda info | grep "user-agent"
 
     - name: Install Anaconda Client & Conda build - Activate base!
       run: |
-        conda activate ANACONDA
         conda install -y anaconda-client conda-build
 
     - name: Build conda package
       run: |
-        conda activate ANACONDA
         conda build -c conda-forge --output-folder ${{ env.CONDA_BUILD_DIR }} .conda
     
     - name: Upload package
       run: |
+        source ~/.bashrc
         conda activate ANACONDA
         find ${{ env.CONDA_BUILD_DIR }} -name *.tar.bz2 | while read file
         do
