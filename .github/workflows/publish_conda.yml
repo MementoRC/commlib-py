@@ -22,6 +22,15 @@ jobs:
         echo "RELEASE_VERSION=$(awk -F'\"' '/__version__/ {print $2}' commlib/__init__.py)" >> "$GITHUB_ENV"
       shell: bash
 
+    - name: Install Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        miniconda-version: "latest"
+        python-version: 3.11
+        auto-update-conda: true
+        auto-activate-base: true
+        use-only-tar-bz2: true
+
     - name: Verify conda environment
       run: |
         conda activate base
@@ -37,7 +46,6 @@ jobs:
     
     - name: Upload package
       run: |
-        conda activate base
         find ${{ env.CONDA_BUILD_DIR }} -name *.tar.bz2 | while read file
         do
             anaconda -t ${{ secrets.ANACONDA_TOKEN }} -u ${{ env.ANACONDA_CHANNEL }} upload $file
