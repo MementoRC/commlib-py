@@ -35,7 +35,17 @@ jobs:
 
     - name: Update conda environment
       run: |
-        conda env list
+        ${{ env.CONDA }}/bin/conda env list
+        ${{ env.CONDA }}/bin/conda activate ANACONDA
+
+    - name: Update conda environment
+      run: |
+        source ~/.bashrc
+        conda activate ANACONDA
+
+    - name: Update conda environment
+      shell: bash -el {0}
+      run: |
         conda activate ANACONDA
 
     - name: Install Anaconda Client & Conda build - Activate base!
