@@ -22,11 +22,12 @@ jobs:
         echo "RELEASE_VERSION=$(awk -F'\"' '/__version__/ {print $2}' commlib/__init__.py)" >> "$GITHUB_ENV"
       shell: bash
 
-    - name: Verify conda environment
+    - name: Update conda environment
       run: |
+        conda update -n base -c defaults conda
         conda init bash
-        conda info | grep "user-agent"
         conda create -n ANACONDA
+        conda info | grep "user-agent"
 
     - name: Install Anaconda Client & Conda build - Activate base!
       run: |
@@ -35,10 +36,12 @@ jobs:
 
     - name: Build conda package
       run: |
+        conda activate ANACONDA
         conda build -c conda-forge --output-folder ${{ env.CONDA_BUILD_DIR }} .conda
     
     - name: Upload package
       run: |
+        conda activate ANACONDA
         find ${{ env.CONDA_BUILD_DIR }} -name *.tar.bz2 | while read file
         do
             anaconda -t ${{ secrets.ANACONDA_TOKEN }} -u ${{ env.ANACONDA_CHANNEL }} upload $file
