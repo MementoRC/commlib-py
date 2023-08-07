@@ -24,8 +24,9 @@ jobs:
 
     - name: Update conda environment
       run: |
+        env
+        source /usr/share/miniconda/etc/profile.d/conda.sh
         conda update -n base -c defaults conda
-        conda init bash
         conda create -n ANACONDA
         conda info | grep "user-agent"
 
