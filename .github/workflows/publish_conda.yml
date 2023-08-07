@@ -25,40 +25,27 @@ jobs:
 
     - name: Update conda environment
       run: |
-        env
-        whereis conda
         source ${{ env.CONDA }}/etc/profile.d/conda.sh
         conda update -n base -c defaults conda
         conda create -n ANACONDA
         conda activate ANACONDA
         conda info | grep "user-agent"
 
-    - name: Update conda environment
+    - name: Install Anaconda Client & Conda build - Activate base!
       run: |
         source ${{ env.CONDA }}/etc/profile.d/conda.sh
         conda activate ANACONDA
-
-    - name: Update conda environment
-      run: |
-        source ~/.bashrc
-        conda activate ANACONDA
-
-    - name: Update conda environment
-      shell: bash -el {0}
-      run: |
-        conda activate ANACONDA
-
-    - name: Install Anaconda Client & Conda build - Activate base!
-      run: |
         conda install -y anaconda-client conda-build
 
     - name: Build conda package
       run: |
+        source ${{ env.CONDA }}/etc/profile.d/conda.sh
+        conda activate ANACONDA
         conda build -c conda-forge --output-folder ${{ env.CONDA_BUILD_DIR }} .conda
     
     - name: Upload package
       run: |
-        source ~/.bashrc
+        source ${{ env.CONDA }}/etc/profile.d/conda.sh
         conda activate ANACONDA
         find ${{ env.CONDA_BUILD_DIR }} -name *.tar.bz2 | while read file
         do
