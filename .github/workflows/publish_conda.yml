@@ -41,7 +41,7 @@ jobs:
       run: |
         source ${{ env.CONDA }}/etc/profile.d/conda.sh
         conda activate ANACONDA
-        conda build -c conda-forge --output-folder ${{ env.CONDA_BUILD_DIR }} .conda
+        conda-build -c conda-forge --output-folder ${{ env.CONDA_BUILD_DIR }} .conda
     
     - name: Upload package
       run: |
